@@ -159,8 +159,14 @@ while getopts ":y:c:s:f:i:k:x:b:t:u:dh" opt; do
 	    echo "                                 Default = \"$BLOCKSIZE\"";
 	    echo "     -u|--uuid              (string) Required - string indicating shell fuction to generate uuid";
 	    echo "                                 Default = \"uuid\"";
-	    echo "     -h|--uuid              (flag) display this help/usage text";
+	    echo "     -h|--help              (flag) display this help/usage text";
 	    echo "     -d|--debug             (flag) run in debug mode";
+	     echo ""
+	    echo "USAGE";
+	    echo "     run_mutect_docker_calling.sh -y < > -c < > -s < > -f < > -i < > -k < > -x < > -b < > -t < > -u < > [other options]";
+	    echo "";
+	    echo "EXAMPLE:";
+	    echo "run_mutect_docker_calling.sh  -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
 	    echo ""
 	    echo "Kevin P. Keegan, 2016";
 	    exit 1;
@@ -283,5 +289,5 @@ fi
 # --uuid uuid 2> error.log2
 
 # same example with this script (with debug on, as it is in the example above)
-# run_mutect_docker_calling.sh -y "/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml" -c "/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram" -s "/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf" -f "/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa" -i "reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai" -k "/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict" -x "/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf" -b "50000000" -t "8" -u "" -d
+# run_mutect_docker_calling.sh -y "/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml" -c "/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram" -s "/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf" -f "/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa" -i "reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai" -k "/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict" -x "/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf" -b "50000000" -t "8" -u "uuid" -d
 
