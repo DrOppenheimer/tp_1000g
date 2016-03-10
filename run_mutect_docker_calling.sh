@@ -161,6 +161,10 @@ while getopts ":y:c:s:f:i:k:x:b:t:u:dh" opt; do
 	    echo "                                 Default = \"uuid\"";
 	    echo "     -h|--uuid              (flag) display this help/usage text";
 	    echo "     -d|--debug             (flag) run in debug mode";
+	    echo ""
+	    echo "Kevin P. Keegan, 2016";
+	    exit 1;
+	    ;;
 	\?)
 	    echo "Invalid option: -$OPTARG" >&2
 	    exit 1
