@@ -118,7 +118,6 @@ for i in `cat $LIST`; do
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     # FILE=`basename $URL`;
-    # FILE=`basename $i`;
     # S3_W_MD5=`md5sum $FILE`;
     # echo -e "md5: \t"$S3_W_MD5 >> $LOG;
     # rm $FILE;
@@ -137,7 +136,6 @@ for i in `cat $LIST`; do
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     # FILE=`basename $URL`;
-    # FILE=`basename $i`;
     # S3_WO_MD5=`md5sum $FILE`;
     # echo -e "md5: \t"$S3_WO_MD5 >> $LOG;
     # rm $FILE;
@@ -186,7 +184,7 @@ for i in `cat $LIST`; do
 
     #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
     MUTECT1_STARTTIME=`date +%s.%N`;
-    CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $i -f $FASTAPATH -u $UUID";
+    CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $FILE -f $FASTAPATH -u $UUID";
     echo $CMD >> $LOG;
     eval $CMD &>>$LOG;
     CMD_STATUS=$?;
@@ -204,7 +202,7 @@ for i in `cat $LIST`; do
 
     # run_mutect_docker_calling.sh -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
     MUTECT2_STARTTIME=`date +%s.%N`;
-    CMD="run_mutect_docker_calling.sh -y $CALLINGYAML -c $i -s $SNPPATH -f $FASTAPATH -i $FAIPATH -k $DICTPATH -x $COSMICPATH -b $BLOCKSIZE -t $THREADCOUNT";
+    CMD="run_mutect_docker_calling.sh -y $CALLINGYAML -c $FILE -s $SNPPATH -f $FASTAPATH -i $FAIPATH -k $DICTPATH -x $COSMICPATH -b $BLOCKSIZE -t $THREADCOUNT";
     echo $CMD >> $LOG;
     eval $CMD &>>$LOG;
     CMD_STATUS=$?;
