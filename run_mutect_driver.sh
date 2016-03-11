@@ -147,6 +147,7 @@ for i in `cat $LIST`; do
     
     URLQUOTED=`curl -k -O $i | python -mjson.tool | grep -e $URLPATTERN1`
     URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
+    echo "URL: "$URL
     FILE=`basename $URL`;
     echo "FILE: "$FILE
     echo "FILE: "$FILE
