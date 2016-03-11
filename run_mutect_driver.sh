@@ -149,7 +149,7 @@ for i in `cat $LIST`; do
     echo "CMD: "$CMD
     #URLQUOTED=
     
-    URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
+    URL= eval $CMD
     echo "URL: "$URL
     FILE=`basename $URL`;
     echo "FILE: "$FILE
