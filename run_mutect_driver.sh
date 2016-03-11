@@ -98,7 +98,7 @@ STATS=$LIST".run_mutect_driver.stats.txt";
 echo $LIST".run_mutect_driver.stats.txt" > $STATS
 echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time" >> $STATS
 
-for i in `cat list`; do
+for i in `cat $LIST`; do
 
     #############################################################################################################
     ### Perform download -- from Grif and Amazon S3, both with and without parcel (leave off amazon until Monday)
