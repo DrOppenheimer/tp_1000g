@@ -148,8 +148,9 @@ for i in `cat $LIST`; do
     #CMD="curl $i | python -mjson.tool | grep -e $URLPATTERN1"
     
     
-    URLQUOTED=`curl $i | python -mjson.tool | grep -e $URLPATTERN1`
-    URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
+    URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1`
+    URL= echo $URL | sed -e 's/,$//' # remove trailing comma
+    URL= echo $URL | sed -e 's/^"//'  -e 's/"$//' # remove quotes
     echo "URL: "$URL
     FILE=`basename $URL`;
     echo "FILE: "$FILE
