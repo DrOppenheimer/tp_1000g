@@ -145,11 +145,10 @@ for i in `cat $LIST`; do
     GRIF_W_ELAPSEDTIME=`echo "$GRIF_W_PARCEL_DL_ENDTIME - $GRIF_W_PARCEL_DL_STARTTIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
 
-    CMD="curl $i | python -mjson.tool | grep -e $URLPATTERN1"
-    echo "CMD: "$CMD
-    #URLQUOTED=
+    #CMD="curl $i | python -mjson.tool | grep -e $URLPATTERN1"
     
-    URL= eval $CMD
+    
+    URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1`
     echo "URL: "$URL
     FILE=`basename $URL`;
     echo "FILE: "$FILE
