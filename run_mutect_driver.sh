@@ -26,7 +26,7 @@ BLOCKSIZE="50000000";                                                      # -b
 THREADCOUNT==`grep -c "processor" /proc/cpuinfo`;                          # -t
 
 # vars used by more than one script
-FASTAPATH="~/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
+FASTAPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
 UUID="uuid";                                                # -u
 
 # Parse input options
