@@ -114,6 +114,10 @@ for i in `cat $LIST`; do
     # S3_W_PARCELDLENDTIME=`date +%s.%N`;
     # S3_W_ELAPSEDTIME=`echo "$S3_W_PARCEL_DL_ENDTIME - $S3_W_PARCEL_DL_STARTTIME" | bc -l`;
     # echo -e "Command runtime: \t"$S3_WO_ELAPSEDTIME >> $LOG;
+    # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN2` # get raw URL -- will be quoted and possibly followed by comma
+    # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
+    # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
+    # FILE=`basename $URL`;
     # FILE=`basename $i`;
     # S3_W_MD5=`md5sum $FILE`;
     # echo -e "md5: \t"$S3_W_MD5 >> $LOG;
@@ -129,6 +133,10 @@ for i in `cat $LIST`; do
     # S3_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
     # S3_WO_ELAPSEDTIME=`echo "$S3_WO_PARCEL_DL_ENDTIME - $S3_WO_PARCEL_DL_STARTTIME" | bc -l`;
     # echo -e "Command runtime: \t"$S3_WO_ELAPSEDTIME >> $LOG;
+    # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN2` # get raw URL -- will be quoted and possibly followed by comma
+    # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
+    # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
+    # FILE=`basename $URL`;
     # FILE=`basename $i`;
     # S3_WO_MD5=`md5sum $FILE`;
     # echo -e "md5: \t"$S3_WO_MD5 >> $LOG;
@@ -144,20 +152,10 @@ for i in `cat $LIST`; do
     GRIF_W_PARCELDLENDTIME=`date +%s.%N`;
     GRIF_W_ELAPSEDTIME=`echo "$GRIF_W_PARCEL_DL_ENDTIME - $GRIF_W_PARCEL_DL_STARTTIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
-
-    #CMD="curl $i | python -mjson.tool | grep -e $URLPATTERN1"
-    
-    
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
-    echo "URL: "$URL
     FILE=`basename $URL`;
-    echo "FILE: "$FILE
-    echo "FILE: "$FILE
-    echo "FILE: "$FILE
-    echo "FILE: "$FILE
-
     GRIF_W_MD5=`md5sum $FILE`;
     echo -e "md5: \t"$GRIF_W_MD5 >> $LOG;
     rm $FILE;
@@ -172,16 +170,10 @@ for i in `cat $LIST`; do
     GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
     GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
-
-    URLQUOTED=`curl -k -O $i | python -mjson.tool | grep -e $URLPATTERN1`
-    URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
+    URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
+    URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
+    URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     FILE=`basename $URL`;
-    echo "FILE: "$FILE
-    echo "FILE: "$FILE
-    echo "FILE: "$FILE
-    echo "FILE: "$FILE
-    
-    FILE=`basename $i`;
     GRIF_WO_MD5=`md5sum $FILE`;
     echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
 
