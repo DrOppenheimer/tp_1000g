@@ -144,7 +144,15 @@ for i in `cat $LIST`; do
     GRIF_W_PARCELDLENDTIME=`date +%s.%N`;
     GRIF_W_ELAPSEDTIME=`echo "$GRIF_W_PARCEL_DL_ENDTIME - $GRIF_W_PARCEL_DL_STARTTIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
-    FILE=`basename $i`;
+    
+    URLQUOTED=`curl -k -O $i | python -mjson.tool | grep -e $URLPATTERN1`
+    URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
+    FILE=`basename $URL`;
+    echo "FILE: "$FILE
+    echo "FILE: "$FILE
+    echo "FILE: "$FILE
+    echo "FILE: "$FILE
+
     GRIF_W_MD5=`md5sum $FILE`;
     echo -e "md5: \t"$GRIF_W_MD5 >> $LOG;
     rm $FILE;
@@ -159,6 +167,15 @@ for i in `cat $LIST`; do
     GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
     GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
+
+    URLQUOTED=`curl -k -O $i | python -mjson.tool | grep -e $URLPATTERN1`
+    URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
+    FILE=`basename $URL`;
+    echo "FILE: "$FILE
+    echo "FILE: "$FILE
+    echo "FILE: "$FILE
+    echo "FILE: "$FILE
+    
     FILE=`basename $i`;
     GRIF_WO_MD5=`md5sum $FILE`;
     echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
