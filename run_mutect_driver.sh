@@ -14,16 +14,16 @@ URLPATTERN2='https://s3';       # -p
 PARCELIP='172.16.128.7';        # -rp
 
 # vars for run_mutect_docker_indexing.sh
-INDEXYAMLPATH="~/mutect2-pon-cwl/tools/cramtools.cwl.yaml"; # -y
+INDEXYAMLPATH="/home/ubuntu/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml"; # -y
 
 # vars for run_mutect_docker_calling.sh
-CALLINGYAML="/mnt/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml" # -y
+CALLINGYAML="/home/ubuntu/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml" # -y
 SNPPATH="/mnt/mutect_ref_files/dbsnp_144.grch38.vcf"                       # -s
 FAIPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa.fai"             # -i
 DICTPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.dict"              # -k
 COSMICPATH="/mnt/mutect_ref_files/CosmicCombined.srt.vcf";                 # -x
-BLOCKSIZE="50000000";                                                   # -b
-THREADCOUNT==`grep -c "processor" /proc/cpuinfo`;                       # -t
+BLOCKSIZE="50000000";                                                      # -b
+THREADCOUNT==`grep -c "processor" /proc/cpuinfo`;                          # -t
 
 # vars used by more than one script
 FASTAPATH="~/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
