@@ -144,8 +144,11 @@ for i in `cat $LIST`; do
     GRIF_W_PARCELDLENDTIME=`date +%s.%N`;
     GRIF_W_ELAPSEDTIME=`echo "$GRIF_W_PARCEL_DL_ENDTIME - $GRIF_W_PARCEL_DL_STARTTIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
+
+    CMD="curl -k -O $i | python -mjson.tool | grep -e $URLPATTERN1"
+    echo "CMD: "$CMD
+    #URLQUOTED=
     
-    URLQUOTED=`curl -k -O $i | python -mjson.tool | grep -e $URLPATTERN1`
     URL= echo $URLQUOTED | sed -e 's/^"//'  -e 's/"$//'
     echo "URL: "$URL
     FILE=`basename $URL`;
