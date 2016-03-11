@@ -54,6 +54,7 @@ while getopts ":l:czh" opt; do
 	    DEBUG=1;
 	    ;;
 	h)
+	    echo ""
 	    echo "DESCRIPTION: run_mutect_driver.sh";
 	    echo "Takes a list of ARK IDs for CRAM files and uses the following scripts to process them:";
 	    echo "     ARK_download.gamma.py         :: to download the *.cram";
