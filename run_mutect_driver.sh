@@ -69,7 +69,8 @@ while getopts ":l:czh" opt; do
 	    echo "Perform analysis that deletes intermediate files:";
 	    echo "     run_mutect_driver.sh -l some_list.txt -c";
 	    echo ""
-	    echo "Kevin P. Keegan, 2015";
+	    echo "Kevin P. Keegan, 2016";
+	    echo ""
 	    exit 1;
 	    ;;
 	\?)
