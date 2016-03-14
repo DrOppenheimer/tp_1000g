@@ -3,7 +3,7 @@
 # driver script for 100 genome analysis
 # have included as few command line options as possible
 # vars for the individual script calls are hard coded below.
-
+STARTDATE=`date`;
 STARTTIME=`date +%s.%N`;			
 #CURRENTTIME=`date +%s.%N`;
 #ELAPSEDTIME=`echo "$CURRENT_TIME - $START_TIME" | bc -l`;
@@ -93,7 +93,7 @@ fi
 # Start the log and stats files
 LOG=$LIST".run_mutect_driver.log.txt";
 echo $LIST".run_mutect_driver.log.txt" > $LOG
-echo $STARTTIME >> $LOG
+echo $STARTDATE >> $LOG
 STATS=$LIST".run_mutect_driver.stats.txt";
 echo $LIST".run_mutect_driver.stats.txt" > $STATS
 echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time" >> $STATS
