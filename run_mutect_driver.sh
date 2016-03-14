@@ -23,7 +23,7 @@ FAIPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa.fai"             # -i
 DICTPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.dict"              # -k
 COSMICPATH="/mnt/mutect_ref_files/CosmicCombined.srt.vcf";                 # -x
 BLOCKSIZE="50000000";                                                      # -b
-THREADCOUNT==`grep -c "processor" /proc/cpuinfo`;                          # -t
+THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;                          # -t
 
 # vars used by more than one script
 FASTAPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
