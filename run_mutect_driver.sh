@@ -120,7 +120,12 @@ for i in `cat $LIST`; do
     # FILE=`basename $URL`;
     # S3_W_MD5=`md5sum $FILE`;
     # echo -e "md5: \t"$S3_W_MD5 >> $LOG;
-    # rm $FILE;
+    # if [ ! -e $FILE ]; then
+    # 	MESSAGE="$FILE does not exist/ does not need to be deleted";
+    #   echo $MESSAGE
+    # else
+    # 	rm $FILE;
+    # fi
 
     # # From Amazon without parcel
     # S3_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
@@ -138,7 +143,12 @@ for i in `cat $LIST`; do
     # FILE=`basename $URL`;
     # S3_WO_MD5=`md5sum $FILE`;
     # echo -e "md5: \t"$S3_WO_MD5 >> $LOG;
-    # rm $FILE;
+    # if [ ! -e $FILE ]; then
+    # 	MESSAGE="$FILE does not exist/ does not need to be deleted";
+    #   echo $MESSAGE
+    # else
+    # 	rm $FILE;
+    # fi
     
     # From Grif with parcel
     GRIF_W_PARCELDLSTARTTIME=`date +%s.%N`;
@@ -156,8 +166,13 @@ for i in `cat $LIST`; do
     FILE=`basename $URL`;
     GRIF_W_MD5=`md5sum $FILE`;
     echo -e "md5: \t"$GRIF_W_MD5 >> $LOG;
-    rm $FILE;
-    
+    if [ ! -e $FILE ]; then
+	MESSAGE="$FILE does not exist/ does not need to be deleted";
+	echo $MESSAGE
+    else
+	rm $FILE;
+    fi
+   
     # From Grif without parcel
     GRIF_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
     CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
@@ -174,7 +189,15 @@ for i in `cat $LIST`; do
     FILE=`basename $URL`;
     GRIF_WO_MD5=`md5sum $FILE`;
     echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
-
+    if [ ! -e $FILE ]; then
+	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
+	echo $MESSAGE;
+	exit 1;
+    else
+	MESSAGE="$FILE exists, will now start indexing";
+	echo $MESSAGE;
+    fi
+    
     #############################################################################################################
 
 
@@ -216,7 +239,14 @@ for i in `cat $LIST`; do
     #############################################################################################################
     ### Cleanup
     #############################################################################################################
-    rm $FILE;
+    if [ ! -e $FILE ]; then
+	MESSAGE="$FILE does not exist; script should have failed before this";
+	echo $MESSAGE;
+	exit 1;
+    else
+	MESSAGE="Done processing $FILE, will now delete it";
+	echo $MESSAGE;
+    fi
     #############################################################################################################
 
     
