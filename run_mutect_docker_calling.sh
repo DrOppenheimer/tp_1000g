@@ -243,18 +243,18 @@ if [ ! -e $COSMICPATH ]; then
     echo $MESSAGE >> $LOG
     exit 1
 fi
-if [ ! -e $BLOCKSIZE ]; then
-    MESSAGE="blocksize $BLOCKSIZE was not supplied or does not exist - it is required"
-    echo $MESSAGE
-    echo $MESSAGE >> $LOG
-    exit 1
-fi
-if [ ! -e $THREADCOUNT ]; then
-    MESSAGE="threadcount $THREADCOUNT was not supplied or does not exist - it is required"
-    echo $MESSAGE
-    echo $MESSAGE >> $LOG
-    exit 1
-fi
+# if [ ! -e $BLOCKSIZE ]; then
+#     MESSAGE="blocksize $BLOCKSIZE was not supplied or does not exist - it is required"
+#     echo $MESSAGE
+#     echo $MESSAGE >> $LOG
+#     exit 1
+# fi
+# if [ ! -e $THREADCOUNT ]; then
+#     MESSAGE="threadcount $THREADCOUNT was not supplied or does not exist - it is required"
+#     echo $MESSAGE
+#     echo $MESSAGE >> $LOG
+#     exit 1
+# fi
 
 # write command as string -- option to run it in normal or debug mode	   
 if  [ $DEBUG -eq 1 ]; then
