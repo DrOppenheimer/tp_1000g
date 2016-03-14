@@ -123,8 +123,10 @@ for i in `cat $LIST`; do
     # if [ ! -e $FILE ]; then
     # 	MESSAGE="$FILE does not exist/ does not need to be deleted";
     #   echo $MESSAGE
+    #   echo $MESSAGE >> $LOG;
     # else
     # 	rm $FILE;
+    #   echo $MESSAGE >> $LOG;
     # fi
 
     # # From Amazon without parcel
@@ -146,8 +148,10 @@ for i in `cat $LIST`; do
     # if [ ! -e $FILE ]; then
     # 	MESSAGE="$FILE does not exist/ does not need to be deleted";
     #   echo $MESSAGE
+    #   echo $MESSAGE >> $LOG;
     # else
     # 	rm $FILE;
+    #   echo $MESSAGE >> $LOG;
     # fi
     
     # From Grif with parcel
@@ -169,8 +173,10 @@ for i in `cat $LIST`; do
     if [ ! -e $FILE ]; then
 	MESSAGE="$FILE does not exist/ does not need to be deleted";
 	echo $MESSAGE
+	echo $MESSAGE >> $LOG;
     else
 	rm $FILE;
+	echo $MESSAGE >> $LOG;
     fi
    
     # From Grif without parcel
@@ -192,10 +198,12 @@ for i in `cat $LIST`; do
     if [ ! -e $FILE ]; then
 	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
 	echo $MESSAGE;
+	echo $MESSAGE >> $LOG;
 	exit 1;
     else
 	MESSAGE="$FILE exists, will now start indexing";
 	echo $MESSAGE;
+	echo $MESSAGE >> $LOG;
     fi
     
     #############################################################################################################
@@ -246,6 +254,8 @@ for i in `cat $LIST`; do
     else
 	MESSAGE="Done processing $FILE, will now delete it";
 	echo $MESSAGE;
+	echo $MESSAGE >> $LOG;
+	rm $FILE
     fi
     #############################################################################################################
 
