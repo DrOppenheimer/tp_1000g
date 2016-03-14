@@ -133,7 +133,7 @@ if [ ! -e $FASTAPATH ]; then
 fi
 
 # write command as string -- option to run it in normal or debug mode	   
-if  [ $DEBUG -eq 1 ]; then
+if [ $DEBUG -eq 1 ]; then
     SHELLCMD="sudo cwl-runner --debug $YAMLPATH --cram_path $CRAMPATH --reference_fasta_path $FASTAPATH --uuid $UUID 2>> $LOG"
 else
     SHELLCMD="sudo cwl-runner $YAMLPATH --cram_path $CRAMPATH --reference_fasta_path $FASTAPATH --uuid $UUID 2>> $LOG"
