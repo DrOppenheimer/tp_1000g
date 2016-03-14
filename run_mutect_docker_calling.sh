@@ -11,6 +11,7 @@ COSMICPATH="~/mutect_ref_files/CosmicCombined.srt.vcf";
 BLOCKSIZE="50000000"; # should this be defined by resources on the machine instead of arbitrary?
 THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;
 UUID="uuid";
+DEBUG=0;
 
 # Parse input options
 while getopts ":y:c:s:f:i:k:x:b:t:u:dh" opt; do

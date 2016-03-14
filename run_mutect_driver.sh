@@ -118,7 +118,7 @@ for i in `cat $LIST`; do
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     # FILE=`basename $URL`;
-    # S3_W_MD5=`md5sum $FILE`;
+    # S3_W_MD5=`md5sum $FILE | cut -d " " -f1`;
     # echo -e "md5: \t"$S3_W_MD5 >> $LOG;
     # if [ ! -e $FILE ]; then
     # 	MESSAGE="$FILE does not exist/ does not need to be deleted";
@@ -143,7 +143,7 @@ for i in `cat $LIST`; do
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     # FILE=`basename $URL`;
-    # S3_WO_MD5=`md5sum $FILE`;
+    # S3_WO_MD5=`md5sum $FILE | cut -d " " -f1`;
     # echo -e "md5: \t"$S3_WO_MD5 >> $LOG;
     # if [ ! -e $FILE ]; then
     # 	MESSAGE="$FILE does not exist/ does not need to be deleted";
@@ -168,7 +168,7 @@ for i in `cat $LIST`; do
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     FILE=`basename $URL`;
-    GRIF_W_MD5=`md5sum $FILE`;
+    GRIF_W_MD5=`md5sum $FILE | cut -d " " -f1`;
     echo -e "md5: \t"$GRIF_W_MD5 >> $LOG;
     if [ ! -e $FILE ]; then
 	MESSAGE="$FILE does not exist/ does not need to be deleted";
@@ -193,7 +193,7 @@ for i in `cat $LIST`; do
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
     FILE=`basename $URL`;
-    GRIF_WO_MD5=`md5sum $FILE`;
+    GRIF_WO_MD5=`md5sum $FILE | cut -d " " -f1`;
     echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
     if [ ! -e $FILE ]; then
 	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
