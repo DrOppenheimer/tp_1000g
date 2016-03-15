@@ -105,6 +105,8 @@ for i in `cat $LIST`; do
     #############################################################################################################
     
     # From Amazon with parcel
+    # echo "#################################" >> $LOG"
+    # echo "DOWNLOAD from Amazon WITH parcel:" >> $LOG"
     # S3_W_PARCELDLSTARTTIME=`date +%s.%N`;
     # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -up -rp $PARCELIP -d";
     # echo $CMD >> $LOG;
@@ -129,7 +131,9 @@ for i in `cat $LIST`; do
     #   echo $MESSAGE >> $LOG;
     # fi
 
-    # # From Amazon without parcel
+    # From Amazon without parcel
+    # echo "#################################" >> $LOG"
+    # echo "DOWNLOAD from Amazon withOUT parcel:" >> $LOG"
     # S3_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
     # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -d";
     # echo $CMD >> $LOG;
@@ -155,6 +159,8 @@ for i in `cat $LIST`; do
     # fi
     
     # From Grif with parcel
+    # echo "#################################" >> $LOG"
+    # echo "DOWNLOAD from Griffin WITH parcel:" >> $LOG"
     GRIF_W_PARCELDLSTARTTIME=`date +%s.%N`;
     CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -up -rp $PARCELIP -d";
     echo $CMD >> $LOG;
@@ -179,93 +185,111 @@ for i in `cat $LIST`; do
 	echo $MESSAGE >> $LOG;
     fi
    
-    # From Grif without parcel
-    GRIF_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
-    CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
-    echo $CMD >> $LOG;
-    eval $CMD &>>$LOG;
-    CMD_STATUS=$?;
-    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
-    GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
-    echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
-    URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
-    URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
-    URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
-    FILE=`basename $URL`;
-    GRIF_WO_MD5=`md5sum $FILE | cut -d " " -f1`;
-    echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
-    if [ ! -e $FILE ]; then
-	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
-	echo $MESSAGE;
-	echo $MESSAGE >> $LOG;
-	exit 1;
+    # # From Grif without parcel
+    # echo "#################################" >> $LOG"
+    # echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG"
+    # GRIF_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
+    # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
+    # echo $CMD >> $LOG;
+    # eval $CMD &>>$LOG;
+    # CMD_STATUS=$?;
+    # echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+    # GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
+    # GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
+    # echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
+    # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
+    # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
+    # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
+    # FILE=`basename $URL`;
+    # GRIF_WO_MD5=`md5sum $FILE | cut -d " " -f1`;
+    # echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
+    # if [ ! -e $FILE ]; then
+    # 	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
+    # 	echo $MESSAGE;
+    # 	echo $MESSAGE >> $LOG;
+    # 	exit 1;
+    # else
+    # 	MESSAGE="$FILE exists, will now start indexing";
+    # 	echo $MESSAGE;
+    # 	echo $MESSAGE >> $LOG;
+    # fi
+    
+    #############################################################################################################
+
+
+    #############################################################################################################
+    ### PERFORM MUTECT CALCULATIONS  -- ONLY IF OUTPUT VCF IS NOT ALREADY PRESENT
+    #############################################################################################################
+    VCFOUT=${FILE%.cram};
+    if [ ! -e $VCFOUT ]; then
+    
+         #############################################################################################################
+         ### MuTect step 1, Indexing
+         #############################################################################################################
+
+         #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
+	MUTECT1_STARTTIME=`date +%s.%N`;
+	CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $FILE -f $FASTAPATH -u $UUID";
+	echo $CMD >> $LOG;
+	eval $CMD &>>$LOG;
+	CMD_STATUS=$?;
+	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+	MUTECT1_ENDTIME=`date +%s.%N`;
+	MUTECT1_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
+	echo -e "Command runtime: \t"$MUTECT1_ELAPSEDTIME >> $LOG;
+
+	#############################################################################################################
+
+	#############################################################################################################
+	### MuTect step 1, Calling
+	#############################################################################################################
+	# run_mutect_docker_calling.sh -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
+	MUTECT2_STARTTIME=`date +%s.%N`;
+	CMD="run_mutect_docker_calling.sh -y $CALLINGYAML -c $FILE -s $SNPPATH -f $FASTAPATH -i $FAIPATH -k $DICTPATH -x $COSMICPATH -b $BLOCKSIZE -t $THREADCOUNT";
+	echo $CMD >> $LOG;
+	eval $CMD &>>$LOG;
+	CMD_STATUS=$?;
+	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+	MUTECT2_ENDTIME=`date +%s.%N`;
+	MUTECT2_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
+	echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
+	#############################################################################################################
+
+	#############################################################################################################
+	### Cleanup
+	#############################################################################################################
+	if [ ! -e $FILE ]; then
+	    MESSAGE="$FILE does not exist; script should have failed before this";
+	    echo $MESSAGE;
+	    exit 1;
+	else
+	    MESSAGE="Done processing $FILE, will now delete it";
+	    echo $MESSAGE;
+	    echo $MESSAGE >> $LOG;
+	    rm $FILE
+	fi
+	#############################################################################################################
+
+	#############################################################################################################
+	### Write nice formatted results to the stats file
+	#############################################################################################################
+	# echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time\n" >> $STATS
+	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS
+
     else
-	MESSAGE="$FILE exists, will now start indexing";
-	echo $MESSAGE;
-	echo $MESSAGE >> $LOG;
-    fi
-    
-    #############################################################################################################
-
-
-    #############################################################################################################
-    ### MuTect step 1, Indexing
-    #############################################################################################################
-
-    #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
-    MUTECT1_STARTTIME=`date +%s.%N`;
-    CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $FILE -f $FASTAPATH -u $UUID";
-    echo $CMD >> $LOG;
-    eval $CMD &>>$LOG;
-    CMD_STATUS=$?;
-    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    MUTECT1_ENDTIME=`date +%s.%N`;
-    MUTECT1_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
-    echo -e "Command runtime: \t"$MUTECT1_ELAPSEDTIME >> $LOG;
-
-    #############################################################################################################
-
-
-    #############################################################################################################
-    ### MuTect step 1, Calling
-    #############################################################################################################
-
-    # run_mutect_docker_calling.sh -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
-    MUTECT2_STARTTIME=`date +%s.%N`;
-    CMD="run_mutect_docker_calling.sh -y $CALLINGYAML -c $FILE -s $SNPPATH -f $FASTAPATH -i $FAIPATH -k $DICTPATH -x $COSMICPATH -b $BLOCKSIZE -t $THREADCOUNT";
-    echo $CMD >> $LOG;
-    eval $CMD &>>$LOG;
-    CMD_STATUS=$?;
-    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    MUTECT2_ENDTIME=`date +%s.%N`;
-    MUTECT2_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
-    echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
-    
-    #############################################################################################################
-
-    #############################################################################################################
-    ### Cleanup
-    #############################################################################################################
-    if [ ! -e $FILE ]; then
-	MESSAGE="$FILE does not exist; script should have failed before this";
-	echo $MESSAGE;
-	exit 1;
-    else
-	MESSAGE="Done processing $FILE, will now delete it";
-	echo $MESSAGE;
-	echo $MESSAGE >> $LOG;
-	rm $FILE
-    fi
-    #############################################################################################################
-
-    
-    #############################################################################################################
-    ### Write nice formatted results to the stats file
-    #############################################################################################################
-    # echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time\n" >> $STATS
-    echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS
-    
+	MSG="*.vcf for this file already exists -- only performed download tests"
+	echo -e "$i\t\
+$FILE\t\
+$S3_W_ELAPSEDTIME\t\
+$S3_W_MD5\t\
+$S3_WO_ELAPSEDTIME\t\
+$S3_WO_MD5\t\
+$GRIF_W_PARCELDLENDTIME\t\
+$GRIF_W_MD5\t\
+$GRIF_WO_PARCEL_DL_ENDTIME\t\
+$GRIF_WO_MD5\t\
+$MSG" >> $STATS
+	
 done    
 
 
