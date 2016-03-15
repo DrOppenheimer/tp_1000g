@@ -114,7 +114,7 @@ for i in `cat $LIST`; do
     # CMD_STATUS=$?;
     # echo -e "Command status: \t"$CMD_STATUS >> $LOG;
     # S3_W_PARCELDLENDTIME=`date +%s.%N`;
-    # S3_W_ELAPSEDTIME=`echo "$S3_W_PARCEL_DL_ENDTIME - $S3_W_PARCEL_DL_STARTTIME" | bc -l`;
+    # S3_W_ELAPSEDTIME=`echo "$S3_W_PARCELDLENDTIME - $S3_W_PARCELDLSTARTTIME" | bc -l`;
     # echo -e "Command runtime: \t"$S3_WO_ELAPSEDTIME >> $LOG;
     # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN2` # get raw URL -- will be quoted and possibly followed by comma
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
@@ -161,14 +161,14 @@ for i in `cat $LIST`; do
     # From Grif with parcel
     # echo "#################################" >> $LOG"
     # echo "DOWNLOAD from Griffin WITH parcel:" >> $LOG"
-    GRIF_W_PARCELDLSTARTTIME=`date +%s.%N`;
+    GRIF_W_PARCELDL_START_TIME=`date +%s.%N`;
     CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -up -rp $PARCELIP -d -b";
     echo $CMD >> $LOG;
     eval $CMD &>>$LOG;
     CMD_STATUS=$?;
     echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    GRIF_W_PARCELDLENDTIME=`date +%s.%N`;
-    GRIF_W_ELAPSEDTIME=`echo "$GRIF_W_PARCEL_DL_ENDTIME - $GRIF_W_PARCEL_DL_STARTTIME" | bc -l`;
+    GRIF_W_PARCELDL_ENDTIME=`date +%s.%N`;
+    GRIF_W_ELAPSED_TIME=`echo "$GRIF_W_PARCELDL_ENDTIME - $GRIF_W_PARCELDL_START_TIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
@@ -188,14 +188,14 @@ for i in `cat $LIST`; do
     # From Grif without parcel
     echo "#################################" >> $LOG"
     echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG"
-    GRIF_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
+    GRIF_WO_PARCEL_DL_START_TIME=`date +%s.%N`;
     CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
     echo $CMD >> $LOG;
     eval $CMD &>>$LOG;
     CMD_STATUS=$?;
     echo -e "Command status: \t"$CMD_STATUS >> $LOG;
     GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
-    GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
+    GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_START_TIME" | bc -l`;
     echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
