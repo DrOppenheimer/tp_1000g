@@ -108,7 +108,7 @@ for i in `cat $LIST`; do
     # echo "#################################" >> $LOG"
     # echo "DOWNLOAD from Amazon WITH parcel:" >> $LOG"
     # S3_W_PARCELDLSTARTTIME=`date +%s.%N`;
-    # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -up -rp $PARCELIP -d";
+    # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -up -rp $PARCELIP -d -b";
     # echo $CMD >> $LOG;
     # eval $CMD &>>$LOG;
     # CMD_STATUS=$?;
@@ -135,7 +135,7 @@ for i in `cat $LIST`; do
     # echo "#################################" >> $LOG"
     # echo "DOWNLOAD from Amazon withOUT parcel:" >> $LOG"
     # S3_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
-    # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -d";
+    # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -d -b";
     # echo $CMD >> $LOG;
     # eval $CMD &>>$LOG;
     # CMD_STATUS=$?;
