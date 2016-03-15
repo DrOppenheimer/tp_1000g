@@ -185,34 +185,34 @@ for i in `cat $LIST`; do
 	echo $MESSAGE >> $LOG;
     fi
    
-    # # From Grif without parcel
-    # echo "#################################" >> $LOG"
-    # echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG"
-    # GRIF_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
-    # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
-    # echo $CMD >> $LOG;
-    # eval $CMD &>>$LOG;
-    # CMD_STATUS=$?;
-    # echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    # GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
-    # GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
-    # echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
-    # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
-    # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
-    # URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
-    # FILE=`basename $URL`;
-    # GRIF_WO_MD5=`md5sum $FILE | cut -d " " -f1`;
-    # echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
-    # if [ ! -e $FILE ]; then
-    # 	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
-    # 	echo $MESSAGE;
-    # 	echo $MESSAGE >> $LOG;
-    # 	exit 1;
-    # else
-    # 	MESSAGE="$FILE exists, will now start indexing";
-    # 	echo $MESSAGE;
-    # 	echo $MESSAGE >> $LOG;
-    # fi
+    # From Grif without parcel
+    echo "#################################" >> $LOG"
+    echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG"
+    GRIF_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
+    CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
+    echo $CMD >> $LOG;
+    eval $CMD &>>$LOG;
+    CMD_STATUS=$?;
+    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+    GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
+    GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_STARTTIME" | bc -l`;
+    echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
+    URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
+    URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
+    URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
+    FILE=`basename $URL`;
+    GRIF_WO_MD5=`md5sum $FILE | cut -d " " -f1`;
+    echo -e "md5: \t"$GRIF_WO_MD5 >> $LOG;
+    if [ ! -e $FILE ]; then
+    	MESSAGE="$FILE does not exist; script can't use a file that doesn't exist";
+    	echo $MESSAGE;
+    	echo $MESSAGE >> $LOG;
+    	exit 1;
+    else
+    	MESSAGE="$FILE exists, will now start indexing";
+    	echo $MESSAGE;
+    	echo $MESSAGE >> $LOG;
+    fi
     
     #############################################################################################################
 
