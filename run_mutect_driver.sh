@@ -251,7 +251,7 @@ for i in `cat $LIST`; do
 	CMD_STATUS=$?;
 	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
 	MUTECT2_ENDTIME=`date +%s.%N`;
-	MUTECT2_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
+	MUTECT2_ELAPSEDTIME=`echo "$MUTECT2_ENDTIME - $MUTECT2_STARTTIME" | bc -l`
 	echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
 	#############################################################################################################
 
