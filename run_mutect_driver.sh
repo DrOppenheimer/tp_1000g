@@ -276,8 +276,8 @@ for i in `cat $LIST`; do
 	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
 	    echo $MESSAGE;
 	    echo $MESSAGE >> $LOG;
-	    rm $FILE
-	    rm *.bai;
+	    sudo rm $FILE
+	    sudo rm *.bai;
 	fi
 	#############################################################################################################
 	
@@ -299,8 +299,8 @@ for i in `cat $LIST`; do
 	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
 	    echo $MESSAGE;
 	    echo $MESSAGE >> $LOG;
-	    rm $FILE
-	    rm *.bai;
+	    sudo rm $FILE
+	    sudo rm *.bai;
 	fi
     fi
 
