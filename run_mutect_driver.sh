@@ -22,8 +22,8 @@ SNPPATH="/mnt/mutect_ref_files/dbsnp_144.grch38.vcf"                       # -s
 FAIPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa.fai"             # -i
 DICTPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.dict"              # -k
 COSMICPATH="/mnt/mutect_ref_files/CosmicCombined.srt.vcf";                 # -x
-BLOCKSIZE="50000000";                                                      # -b
-THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;                          # -t
+BLOCKSIZE="50000000";                                                      # -b # Shenglai (3-15-16) # Play with smaller block sizes to see if you can change the speed
+THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;                           # -t
 
 # vars used by more than one script
 FASTAPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
@@ -97,6 +97,12 @@ echo $STARTDATE >> $LOG
 STATS=$LIST".run_mutect_driver.stats.txt";
 echo $LIST".run_mutect_driver.stats.txt" > $STATS
 echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time" >> $STATS
+
+# start parcel (tcp2udt)
+
+#test=`ps | grep parcel`
+#if [[ -z "$test" ]]; then echo "works"; fi
+
 
 for i in `cat $LIST`; do
 
@@ -263,10 +269,11 @@ for i in `cat $LIST`; do
 	    echo $MESSAGE;
 	    exit 1;
 	else
-	    MESSAGE="Done processing $FILE, will now delete it";
+	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
 	    echo $MESSAGE;
 	    echo $MESSAGE >> $LOG;
 	    rm $FILE
+	    rm *.bai;
 	fi
 	#############################################################################################################
 
