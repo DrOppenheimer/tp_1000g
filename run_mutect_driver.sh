@@ -190,7 +190,7 @@ for i in `cat $LIST`; do
 	rm $FILE;
 	echo $MESSAGE >> $LOG;
     fi
-   
+    
     # From Grif without parcel
     echo "#################################" >> $LOG"
     echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG"
@@ -221,19 +221,19 @@ for i in `cat $LIST`; do
     fi
     
     #############################################################################################################
-
-
+    
+    
     #############################################################################################################
     ### PERFORM MUTECT CALCULATIONS  -- ONLY IF OUTPUT VCF IS NOT ALREADY PRESENT
     #############################################################################################################
     VCFOUT=${FILE%.cram};
     if [ ! -e $VCFOUT ]; then
-    
-         #############################################################################################################
-         ### MuTect step 1, Indexing
-         #############################################################################################################
-
-         #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
+	
+        #############################################################################################################
+        ### MuTect step 1, Indexing
+        #############################################################################################################
+	
+        #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
 	MUTECT1_STARTTIME=`date +%s.%N`;
 	CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $FILE -f $FASTAPATH -u $UUID";
 	echo $CMD >> $LOG;
@@ -243,9 +243,9 @@ for i in `cat $LIST`; do
 	MUTECT1_ENDTIME=`date +%s.%N`;
 	MUTECT1_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
 	echo -e "Command runtime: \t"$MUTECT1_ELAPSEDTIME >> $LOG;
-
+	
 	#############################################################################################################
-
+	
 	#############################################################################################################
 	### MuTect step 1, Calling
 	#############################################################################################################
@@ -260,7 +260,7 @@ for i in `cat $LIST`; do
 	MUTECT2_ELAPSEDTIME=`echo "$MUTECT2_ENDTIME - $MUTECT2_STARTTIME" | bc -l`
 	echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
 	#############################################################################################################
-
+	
 	#############################################################################################################
 	### Cleanup
 	#############################################################################################################
@@ -276,7 +276,7 @@ for i in `cat $LIST`; do
 	    rm *.bai;
 	fi
 	#############################################################################################################
-
+	
 	#############################################################################################################
 	### Write nice formatted results to the stats file
 	#############################################################################################################
@@ -285,5 +285,6 @@ for i in `cat $LIST`; do
     else
 	MSG="*.vcf for this file already exists -- only performed download tests";
 	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MSG" >> $STATS;
-	
-done;    
+    fi
+
+done;
