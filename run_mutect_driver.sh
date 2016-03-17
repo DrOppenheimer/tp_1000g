@@ -226,7 +226,10 @@ for i in `cat $LIST`; do
     #############################################################################################################
     ### PERFORM MUTECT CALCULATIONS  -- ONLY IF OUTPUT VCF IS NOT ALREADY PRESENT
     #############################################################################################################
-    VCFOUT=${FILE%.vcf};
+    #extension="${FILE##*.}"
+    filename="${FILE%.*}"
+    VCFOUT=$filename".vcf";
+    
     if [ ! -e $VCFOUT ]; then
 
 	MESSAGE="$VCFOUT does not exist, will now start indexing";
