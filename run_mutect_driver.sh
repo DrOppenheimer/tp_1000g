@@ -3,10 +3,17 @@
 # driver script for 100 genome analysis
 # have included as few command line options as possible
 # vars for the individual script calls are hard coded below.
+UPLOADRESULTS=0;
+
 STARTDATE=`date`;
 STARTTIME=`date +%s.%N`;			
 #CURRENTTIME=`date +%s.%N`;
 #ELAPSEDTIME=`echo "$CURRENT_TIME - $START_TIME" | bc -l`;
+
+
+# Fix UUID problem that Shenglai spotted 3-17-16
+# Fix time calculation problem (   calc=$(echo "$String2 + $String8"|bc)   )
+# have it dl ref data automatically 3-17-16
 
 # vars for ARK_download.gamma.py
 URLPATTERN1='https://griffin';  # -p
@@ -24,6 +31,10 @@ DICTPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.dict"              # -k
 COSMICPATH="/mnt/mutect_ref_files/CosmicCombined.srt.vcf";                 # -x
 BLOCKSIZE="50000000";                                                      # -b # Shenglai (3-15-16) # Play with smaller block sizes to see if you can change the speed
 THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;                           # -t
+
+# vars for upload
+UPLOADBUCKET="1000_genome_exome";
+
 
 # vars used by more than one script
 FASTAPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
@@ -89,6 +100,10 @@ if [ ! -e $LIST ]; then
     echo "List $LIST not supplied or does not exist - this is required"
     exit 1
 fi
+
+# Make sure that the reference data exists -- if not, download it automatically
+if [ ! -e $LIST ]
+
 
 # Start the log and stats files
 LOG=$LIST".run_mutect_driver.log.txt";
@@ -228,7 +243,7 @@ for i in `cat $LIST`; do
     #############################################################################################################
     #extension="${FILE##*.}"
     filename="${FILE%.*}"
-    VCFOUT=$filename".vcf";
+    VCFOUT=$filename"_pon.srt.vcf";
     
     if [ ! -e $VCFOUT ]; then
 
@@ -254,7 +269,7 @@ for i in `cat $LIST`; do
 	#############################################################################################################
 	
 	#############################################################################################################
-	### MuTect step 1, Calling
+	### MuTect step 2, Calling
 	#############################################################################################################
 	# run_mutect_docker_calling.sh -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
 	MUTECT2_STARTTIME=`date +%s.%N`;
@@ -267,7 +282,35 @@ for i in `cat $LIST`; do
 	MUTECT2_ELAPSEDTIME=`echo "$MUTECT2_ENDTIME - $MUTECT2_STARTTIME" | bc -l`
 	echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
 	#############################################################################################################
-	
+
+	#############################################################################################################
+	### Upload Results (if option is selected)
+	#############################################################################################################
+	if [ $UPLOADRESULTS -eq 1 ]; then
+	    
+	    MESSAGE="Uploading results ( "$VCFOUT" ) to location specified in ~/.s3.upload.cfg";
+	    echo $MESSAGE;
+	    echo $MESSAGE >> $LOG;
+	    CMD="s3cmd -c ~/.upload.cfg put $VCFOUT s3://$UPLOADBUCKET"
+	    echo $CMD >> $LOG;
+	    eval $CMD &>>$LOG;
+	    CMD_STATUS=$?;
+	    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+
+	    ########################################
+	    # INCLUDE DELETION OF LOCAL RESULTS HERE
+	    ########################################
+	    
+	    # Put file into bucket
+            # s3cmd put FILE [FILE...] s3://BUCKET[/PREFIX]
+
+	    # Conditional transfer — only files that don’t exist at the destination in the same version are transferred
+	    # by the s3cmd sync command. By default a md5 checksum and file size is compared.
+
+	    # Synchronize a directory tree to S3 (checks files freshness using size and 
+	    # md5 checksum, unless overridden by options, see below)
+            # s3cmd sync LOCAL_DIR s3://BUCKET[/PREFIX] or s3://BUCKET[/PREFIX] LOCAL_DIR
+	fi
 	#############################################################################################################
 	### Cleanup
 	#############################################################################################################
