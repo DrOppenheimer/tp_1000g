@@ -101,9 +101,8 @@ if [ ! -e $LIST ]; then
     exit 1
 fi
 
-# Make sure that the reference data exists -- if not, download it automatically
-if [ ! -e $LIST ]
-
+### Make sure that the reference data exists -- if not, download it automatically
+#if [ ! -e $LIST ]
 
 # Start the log and stats files
 LOG=$LIST".run_mutect_driver.log.txt";
