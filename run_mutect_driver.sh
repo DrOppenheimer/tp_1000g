@@ -150,6 +150,7 @@ for i in `cat $LIST`; do
     # 	rm $FILE;
     #   echo $MESSAGE >> $LOG;
     # fi
+    # echo "#################################" >> $LOG"
 
     # From Amazon without parcel
     # echo "#################################" >> $LOG"
@@ -177,10 +178,11 @@ for i in `cat $LIST`; do
     # 	rm $FILE;
     #   echo $MESSAGE >> $LOG;
     # fi
+    # echo "#################################" >> $LOG"
     
     # From Grif with parcel
-    # echo "#################################" >> $LOG"
-    # echo "DOWNLOAD from Griffin WITH parcel:" >> $LOG"
+    echo "#################################" >> $LOG
+    echo "DOWNLOAD from Griffin WITH parcel:" >> $LOG
     GRIF_W_PARCELDL_START_TIME=`date +%s.%N`;
     CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -up -rp $PARCELIP -d -b";
     echo $CMD >> $LOG;
@@ -204,10 +206,11 @@ for i in `cat $LIST`; do
 	rm $FILE;
 	echo $MESSAGE >> $LOG;
     fi
+    echo "#################################" >> $LOG"
     
     # From Grif without parcel
-    echo "#################################" >> $LOG"
-    echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG"
+    echo "#################################" >> $LOG
+    echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG
     GRIF_WO_PARCEL_DL_START_TIME=`date +%s.%N`;
     CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
     echo $CMD >> $LOG;
@@ -233,6 +236,8 @@ for i in `cat $LIST`; do
     	echo $MESSAGE;
     	echo $MESSAGE >> $LOG;
     fi
+    echo "#################################" >> $LOG
+
     
     #############################################################################################################
     
