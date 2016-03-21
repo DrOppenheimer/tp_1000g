@@ -112,6 +112,10 @@ STATS=$LIST".run_mutect_driver.stats.txt";
 echo $LIST".run_mutect_driver.stats.txt" > $STATS
 echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time" >> $STATS
 
+# Download the ref data if it is not already there
+# no logging or error checking
+dl_ref_data.sh
+
 # start parcel (tcp2udt)
 
 #test=`ps | grep parcel`
