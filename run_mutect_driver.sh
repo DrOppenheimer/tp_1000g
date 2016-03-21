@@ -357,5 +357,5 @@ for i in `cat $LIST`; do
 	    sudo rm *.bai;
 	fi
     fi
-
+    
 done;

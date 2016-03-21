@@ -14,5 +14,3 @@ if [ ! -e $REF_FILE ]; then
 else
     echo "Ref data is already installed"
 fi
-
-sudo chown ubuntu:ubuntu /mnt
