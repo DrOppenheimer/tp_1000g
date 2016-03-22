@@ -222,7 +222,7 @@ for i in `cat $LIST`; do
     echo "#################################" >> $LOG
     echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG
     GRIF_WO_PARCEL_DL_START_TIME=`date +%s.%N`;
-    CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d";
+    CMD="ARK_download.gamma.py -a $i -p $URLPATTERN1 -d -b";
     echo $CMD >> $LOG;
     eval $CMD &>>$LOG;
     CMD_STATUS=$?;
