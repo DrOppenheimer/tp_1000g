@@ -129,8 +129,8 @@ for i in `cat $LIST`; do
     #############################################################################################################
     
     # From Amazon with parcel
-    # echo "#################################" >> $LOG"
-    # echo "DOWNLOAD from Amazon WITH parcel:" >> $LOG"
+    # echo "#################################" >> $LOG
+    # echo "DOWNLOAD from Amazon WITH parcel:" >> $LOG
     # S3_W_PARCELDLSTARTTIME=`date +%s.%N`;
     # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -up -rp $PARCELIP -d -b";
     # echo $CMD >> $LOG;
@@ -154,11 +154,11 @@ for i in `cat $LIST`; do
     # 	rm $FILE;
     #   echo $MESSAGE >> $LOG;
     # fi
-    # echo "#################################" >> $LOG"
+    # echo "#################################" >> $LOG
 
     # From Amazon without parcel
-    # echo "#################################" >> $LOG"
-    # echo "DOWNLOAD from Amazon withOUT parcel:" >> $LOG"
+    # echo "#################################" >> $LOG
+    # echo "DOWNLOAD from Amazon withOUT parcel:" >> $LOG
     # S3_WO_PARCEL_DL_STARTTIME=`date +%s.%N`;
     # CMD="ARK_download.gamma.py -a $i -p $URLPATTERN2 -d -b";
     # echo $CMD >> $LOG;
@@ -182,7 +182,7 @@ for i in `cat $LIST`; do
     # 	rm $FILE;
     #   echo $MESSAGE >> $LOG;
     # fi
-    # echo "#################################" >> $LOG"
+    # echo "#################################" >> $LOG
     
     # From Grif with parcel
     echo "#################################" >> $LOG
@@ -210,9 +210,9 @@ for i in `cat $LIST`; do
 	rm $FILE;
 	echo $MESSAGE >> $LOG;
     fi
-    echo "#################################" >> $LOG"
+    echo "#################################" >> $LOG
     
-    # From Grif without parcel
+    # From Grif without parcel    
     echo "#################################" >> $LOG
     echo "DOWNLOAD from Griffin withOUT parcel:" >> $LOG
     GRIF_WO_PARCEL_DL_START_TIME=`date +%s.%N`;
@@ -252,6 +252,7 @@ for i in `cat $LIST`; do
     #extension="${FILE##*.}"
     filename="${FILE%.*}"
     VCFOUT=$filename"_pon.srt.vcf";
+    BAIOUT=$filename".bai"
     
     if [ ! -e $VCFOUT ]; then
 
@@ -325,13 +326,14 @@ for i in `cat $LIST`; do
 	if [ ! -e $FILE ]; then
 	    MESSAGE="$FILE does not exist; script should have failed before this";
 	    echo $MESSAGE;
+	    echo $MESSAGE >> $LOG;
 	    exit 1;
 	else
 	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
 	    echo $MESSAGE;
 	    echo $MESSAGE >> $LOG;
 	    sudo rm $FILE;
-	    sudo rm *.bai;
+	    sudo rm $BAIOUT;
 	fi
 	#############################################################################################################
 	
@@ -340,7 +342,12 @@ for i in `cat $LIST`; do
 	#############################################################################################################
 	# echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time\n" >> $STATS
 	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
+
     else
+
+	#############################################################################################################
+	### What to do if the file has already been processed (vcf present), and presumably you are running this just for file transfer rates
+	#############################################################################################################
 	MESSAGE="$VCFOUT already exists, will skip indexing and calling";
     	echo $MESSAGE;
     	echo $MESSAGE >> $LOG;
@@ -354,8 +361,11 @@ for i in `cat $LIST`; do
 	    echo $MESSAGE;
 	    echo $MESSAGE >> $LOG;
 	    sudo rm $FILE;
-	    sudo rm *.bai;
+	    sudo rm $BAIOUT;
 	fi
+	#############################################################################################################
+
     fi
+    
     
 done;
