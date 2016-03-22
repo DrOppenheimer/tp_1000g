@@ -18,7 +18,13 @@ STARTTIME=`date +%s.%N`;
 # vars for ARK_download.gamma.py
 URLPATTERN1='https://griffin';  # -p
 URLPATTERN2='https://s3';       # -p
-PARCELIP='172.16.128.7';        # -rp
+#PARCELIP='172.16.128.7';        # -rp # for external access
+PARCELIP='192.170.228.105';     # for internal access
+
+# ips to access Griff internally
+# 192.170.228.105, 192.170.228.106, 192.170.228.107
+# external Grif ip
+# PARCELIP
 
 # vars for run_mutect_docker_indexing.sh
 INDEXYAMLPATH="/home/ubuntu/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml"; # -y
