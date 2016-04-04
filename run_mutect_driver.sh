@@ -357,9 +357,7 @@ for i in `cat $LIST`; do
 	# echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time\n" >> $STATS
 	#echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
 	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
-
-	                                                                                    
-	
+	                                                                                   	
     else
 
 	#############################################################################################################
@@ -368,7 +366,7 @@ for i in `cat $LIST`; do
 	MESSAGE="$VCFOUT already exists, will skip indexing and calling";
     	echo $MESSAGE;
     	echo $MESSAGE >> $LOG;
-	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MESSAGE" >> $STATS;
+	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MESSAGE" >> $STATS;
 	if [ ! -e $FILE ]; then
 	    MESSAGE="$FILE does not exist; script should have failed before this";
 	    echo $MESSAGE;
