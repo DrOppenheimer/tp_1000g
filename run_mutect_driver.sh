@@ -144,7 +144,7 @@ for i in `cat $LIST`; do
     # eval $CMD &>>$LOG;
     # CMD_STATUS=$?;
     # echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    # S3_W_ELAPSEDTIME=(($SEECONDS - $S3_W_PARCELDLSTARTTIME))
+    # S3_W_ELAPSEDTIME=$(($SEECONDS - $S3_W_PARCELDLSTARTTIME))
     # echo -e "Command runtime: \t"$S3_WO_ELAPSEDTIME >> $LOG;
     # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN2` # get raw URL -- will be quoted and possibly followed by comma
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
@@ -171,7 +171,7 @@ for i in `cat $LIST`; do
     # eval $CMD &>>$LOG;
     # CMD_STATUS=$?;
     # echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-    # S3_WO_ELAPSEDTIME=(($SECONDS - S3_WO_PARCEL_DL_STARTTIME));
+    # S3_WO_ELAPSEDTIME=$(($SECONDS - S3_WO_PARCEL_DL_STARTTIME));
     # echo -e "Command runtime: \t"$S3_WO_ELAPSEDTIME >> $LOG;
     # URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN2` # get raw URL -- will be quoted and possibly followed by comma
     # URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
@@ -201,7 +201,7 @@ for i in `cat $LIST`; do
     echo -e "Command status: \t"$CMD_STATUS >> $LOG;
     #GRIF_W_PARCELDL_ENDTIME=`date +%s.%N`;
     #GRIF_W_ELAPSED_TIME=`echo "$GRIF_W_PARCELDL_ENDTIME - $GRIF_W_PARCELDL_START_TIME" | bc -l`;
-    GRIF_W_ELAPSED_TIME=(($SECONDS - $GRIF_W_PARCELDL_START_TIME));
+    GRIF_W_ELAPSED_TIME=$(($SECONDS - $GRIF_W_PARCELDL_START_TIME));
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
@@ -231,7 +231,7 @@ for i in `cat $LIST`; do
     echo -e "Command status: \t"$CMD_STATUS >> $LOG;
     #GRIF_WO_PARCEL_DL_ENDTIME=`date +%s.%N`;
     #GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_START_TIME" | bc -l`;
-    GRIF_WO_ELAPSEDTIME=(($SECONDS - $GRIF_WO_PARCEL_DL_START_TIME));
+    GRIF_WO_ELAPSEDTIME=$(($SECONDS - $GRIF_WO_PARCEL_DL_START_TIME));
     echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
@@ -284,7 +284,7 @@ for i in `cat $LIST`; do
 	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
 	#MUTECT1_ENDTIME=`date +%s.%N`;
 	#MUTECT1_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
-	MUTECT1_ELAPSEDTIME=(($SECONDS - $MUTECT1_STARTTIME))
+	MUTECT1_ELAPSEDTIME=$(($SECONDS - $MUTECT1_STARTTIME))
 	echo -e "Command runtime: \t"$MUTECT1_ELAPSEDTIME >> $LOG;
 	
 	#############################################################################################################
@@ -302,7 +302,7 @@ for i in `cat $LIST`; do
 	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
 	#MUTECT2_ENDTIME=`date +%s.%N`;
 	#MUTECT2_ELAPSEDTIME=`echo "$MUTECT2_ENDTIME - $MUTECT2_STARTTIME" | bc -l`
-	MUTECT2_ELAPSEDTIME=(($SECONDS - $MUTECT2_STARTTIME))
+	MUTECT2_ELAPSEDTIME=$(($SECONDS - $MUTECT2_STARTTIME))
 	echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
 	#############################################################################################################
 
