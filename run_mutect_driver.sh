@@ -18,9 +18,9 @@ STARTTIME=`date +%s.%N`;
 # vars for ARK_download.gamma.py
 URLPATTERN1='https://griffin';  # -p
 URLPATTERN2='https://s3';       # -p
-#PARCELIP='172.16.128.7';        # -rp # for external access
+PARCELIP='172.16.128.7';        # -rp # for external access
            #172.16.128.7
-PARCELIP='192.170.228.105';     # for internal access
+#PARCELIP='192.170.228.105';     # for internal access
 
 # ips to access Griff internally
 # 192.170.228.105, 192.170.228.106, 192.170.228.107
@@ -203,7 +203,7 @@ for i in `cat $LIST`; do
     #GRIF_W_ELAPSED_TIME=`echo "$GRIF_W_PARCELDL_ENDTIME - $GRIF_W_PARCELDL_START_TIME" | bc -l`;
     GRIF_W_ELAPSED_TIME=$(($SECONDS - $GRIF_W_PARCELDL_START_TIME));
     if [ $DEBUG==1 ]; then
-	echo "GRIF_W_ELAPSED_TIME="$GRIF_W_ELAPSED_TIME;
+	echo "GRIF_W_ELAPSED_TIME (s): "$GRIF_W_ELAPSED_TIME;
     fi
     echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
@@ -236,7 +236,7 @@ for i in `cat $LIST`; do
     #GRIF_WO_ELAPSEDTIME=`echo "$GRIF_WO_PARCEL_DL_ENDTIME - $GRIF_WO_PARCEL_DL_START_TIME" | bc -l`;
     GRIF_WO_ELAPSEDTIME=$(($SECONDS - $GRIF_WO_PARCEL_DL_START_TIME));
     if [ $DEBUG==1 ]; then
-	echo "GRIF_WO_ELAPSEDTIME"$GRIF_WO_ELAPSEDTIME;
+	echo "GRIF_WO_ELAPSEDTIME (s): "$GRIF_WO_ELAPSEDTIME;
     fi
     echo -e "Command runtime: \t"$GRIF_WO_ELAPSEDTIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
