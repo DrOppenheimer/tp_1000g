@@ -270,6 +270,10 @@ for i in `cat $LIST`; do
     #############################################################################################################
     if [ $DOWNLOADONLY!=1 ]; then
 
+	MESSAGE="Applying mutect to "$filename
+	echo $MESSAGE;
+	echo $MESSAGE >> $LOG;
+	
 	#extension="${FILE##*.}"
 	filename="${FILE%.*}"
 	VCFOUT=$filename"_pon.srt.vcf";
