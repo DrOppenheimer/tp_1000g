@@ -38,6 +38,7 @@ DICTPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.dict"              # -k
 COSMICPATH="/mnt/mutect_ref_files/CosmicCombined.srt.vcf";                 # -x
 BLOCKSIZE="50000000";                                                      # -b # Shenglai (3-15-16) # Play with smaller block sizes to see if you can change the speed
 THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;                           # -t
+DOWNLOADONLY=0;
 
 # vars for upload
 UPLOADBUCKET="1000_genome_exome";
