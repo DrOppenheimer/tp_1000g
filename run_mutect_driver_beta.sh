@@ -269,7 +269,7 @@ for i in `cat $LIST`; do
     #############################################################################################################
     ### PERFORM MUTECT CALCULATIONS  -- ONLY IF OUTPUT VCF IS NOT ALREADY PRESENT
     #############################################################################################################
-    if [ $DOWNLOADONLY==0 ]; then
+    if [ $DOWNLOADONLY!=0 ]; then
 
 	MESSAGE="Applying mutect to "$filename
 	echo $MESSAGE;
