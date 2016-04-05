@@ -210,7 +210,7 @@ for i in `cat $LIST`; do
     if [ $DEBUG==1 ]; then
 	echo "GRIF_W_ELAPSED_TIME (s): "$GRIF_W_ELAPSED_TIME;
     fi
-    echo -e "Command runtime: \t"$GRIF_W_ELAPSEDTIME >> $LOG;
+    echo -e "Command runtime: \t"$GRIF_W_ELAPSED_TIME >> $LOG;
     URL=`curl $i | python -mjson.tool | grep -e $URLPATTERN1` # get raw URL -- will be quoted and possibly followed by comma
     URL=`echo $URL | sed -e 's/,$//'` # remove trailing comma
     URL=`echo $URL | sed -e 's/^"//'  -e 's/"$//'` # remove quotes
