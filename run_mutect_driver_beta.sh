@@ -48,7 +48,7 @@ FASTAPATH="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa";  # -f
 UUID="uuid";                                                # -u
 
 # Parse input options
-while getopts ":l:czh" opt; do
+while getopts ":l:cdzh" opt; do
     case $opt in
 	l)
 	    echo "-l was triggered, Parameter: $OPTARG" >&2
@@ -66,6 +66,10 @@ while getopts ":l:czh" opt; do
 	c)
 	    echo "-c was triggered, Parameter: $OPTARG" >&2
 	    CLEAN=1;
+	    ;;
+	d)
+	    echo "-d was triggered, Parameter: $OPTARG" >&2
+	    DOWNLOADONLY=1;
 	    ;;
 	z)
 	    echo "-z was triggered, Parameter: $OPTARG" >&2
@@ -264,128 +268,137 @@ for i in `cat $LIST`; do
     #############################################################################################################
     ### PERFORM MUTECT CALCULATIONS  -- ONLY IF OUTPUT VCF IS NOT ALREADY PRESENT
     #############################################################################################################
-    #extension="${FILE##*.}"
-    filename="${FILE%.*}"
-    VCFOUT=$filename"_pon.srt.vcf";
-    BAIOUT=$filename".bai"
-    
-    if [ ! -e $VCFOUT ]; then
+    if [ $DOWNLOADONLY!=1 ]; then
 
-	MESSAGE="$VCFOUT does not exist, will now start indexing";
-    	echo $MESSAGE;
-    	echo $MESSAGE >> $LOG;
+	#extension="${FILE##*.}"
+	filename="${FILE%.*}"
+	VCFOUT=$filename"_pon.srt.vcf";
+	BAIOUT=$filename".bai"
 	
-        #############################################################################################################
-        ### MuTect step 1, Indexing
-        #############################################################################################################
-	
-        #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
-	#MUTECT1_STARTTIME=`date +%s.%N`;
-	MUTECT1_STARTTIME=$SECONDS;
-	MYUUID=`$UUID`
-	CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $FILE -f $FASTAPATH -u $MYUUID";
-	echo $CMD >> $LOG;
-	eval $CMD &>>$LOG;
-	CMD_STATUS=$?;
-	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-	#MUTECT1_ENDTIME=`date +%s.%N`;
-	#MUTECT1_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
-	MUTECT1_ELAPSEDTIME=$(($SECONDS - $MUTECT1_STARTTIME))
-	echo -e "Command runtime: \t"$MUTECT1_ELAPSEDTIME >> $LOG;
-	
-	#############################################################################################################
-	
-	#############################################################################################################
-	### MuTect step 2, Calling
-	#############################################################################################################
-	# run_mutect_docker_calling.sh -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
-	#MUTECT2_STARTTIME=`date +%s.%N`;
-	MUTECT2_STARTTIME=$SECONDS;
-	CMD="run_mutect_docker_calling.sh -y $CALLINGYAML -c $FILE -s $SNPPATH -f $FASTAPATH -i $FAIPATH -k $DICTPATH -x $COSMICPATH -b $BLOCKSIZE -t $THREADCOUNT";
-	echo $CMD >> $LOG;
-	eval $CMD &>>$LOG;
-	CMD_STATUS=$?;
-	echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-	#MUTECT2_ENDTIME=`date +%s.%N`;
-	#MUTECT2_ELAPSEDTIME=`echo "$MUTECT2_ENDTIME - $MUTECT2_STARTTIME" | bc -l`
-	MUTECT2_ELAPSEDTIME=$(($SECONDS - $MUTECT2_STARTTIME))
-	echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
-	#############################################################################################################
+	if [ ! -e $VCFOUT ]; then
 
-	#############################################################################################################
-	### Upload Results (if option is selected)
-	#############################################################################################################
-	if [ $UPLOADRESULTS -eq 1 ]; then
+	    MESSAGE="$VCFOUT does not exist, will now start indexing";
+    	    echo $MESSAGE;
+    	    echo $MESSAGE >> $LOG;
+	
+            #############################################################################################################
+            ### MuTect step 1, Indexing
+            #############################################################################################################
 	    
-	    MESSAGE="Uploading results ( "$VCFOUT" ) to location specified in ~/.s3.upload.cfg";
-	    echo $MESSAGE;
-	    echo $MESSAGE >> $LOG;
-	    CMD="s3cmd -c ~/.upload.cfg put $VCFOUT s3://$UPLOADBUCKET"
+            #run_mutect_docker_indexing.sh -y \"/home/kevin/git/mutect2-pon-cwl/tools/cramtools.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -u \"uuid\" -d
+	    #MUTECT1_STARTTIME=`date +%s.%N`;
+	    MUTECT1_STARTTIME=$SECONDS;
+	    MYUUID=`$UUID`
+	    CMD="run_mutect_docker_indexing.sh -y $INDEXYAMLPATH -c $FILE -f $FASTAPATH -u $MYUUID";
 	    echo $CMD >> $LOG;
 	    eval $CMD &>>$LOG;
 	    CMD_STATUS=$?;
 	    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
-
-	    ########################################
-	    # INCLUDE DELETION OF LOCAL RESULTS HERE
-	    ########################################
-	    
-	    # Put file into bucket
-            # s3cmd put FILE [FILE...] s3://BUCKET[/PREFIX]
-
-	    # Conditional transfer — only files that don’t exist at the destination in the same version are transferred
-	    # by the s3cmd sync command. By default a md5 checksum and file size is compared.
-
-	    # Synchronize a directory tree to S3 (checks files freshness using size and 
-	    # md5 checksum, unless overridden by options, see below)
-            # s3cmd sync LOCAL_DIR s3://BUCKET[/PREFIX] or s3://BUCKET[/PREFIX] LOCAL_DIR
-	fi
-	#############################################################################################################
-	### Cleanup
-	#############################################################################################################
-	if [ ! -e $FILE ]; then
-	    MESSAGE="$FILE does not exist; script should have failed before this";
-	    echo $MESSAGE;
-	    echo $MESSAGE >> $LOG;
-	    exit 1;
-	else
-	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
-	    echo $MESSAGE;
-	    echo $MESSAGE >> $LOG;
-	    sudo rm $FILE;
-	    sudo rm $BAIOUT;
-	fi
-	#############################################################################################################
+	    #MUTECT1_ENDTIME=`date +%s.%N`;
+	    #MUTECT1_ELAPSEDTIME=`echo "$MUTECT1_ENDTIME - $MUTECT1_STARTTIME" | bc -l`
+	    MUTECT1_ELAPSEDTIME=$(($SECONDS - $MUTECT1_STARTTIME))
+	    echo -e "Command runtime: \t"$MUTECT1_ELAPSEDTIME >> $LOG;
 	
-	#############################################################################################################
-	### Write nice formatted results to the stats file
-	#############################################################################################################
-	# echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time\n" >> $STATS
-	#echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
-	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
-	                                                                                   	
-    else
+	    #############################################################################################################
+	    
+	    #############################################################################################################
+	    ### MuTect step 2, Calling
+	    #############################################################################################################
+	    # run_mutect_docker_calling.sh -y \"/home/kevin/git/mutect2-pon-cwl/workflows/mutect2-pon-workflow.cwl.yaml\" -c \"/home/kevin/HG00115.alt_bwamem_GRCh38DH.20150826.GBR.exome.cram\" -s \"/home/kevin/mutect_ref_files/dbsnp_144.grch38.vcf\" -f \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa\" -i \"reference_fasta_fai /home/kevin/mutect_ref_files/Homo_sapiens_assembly38.fa.fai\" -k \"/home/kevin/mutect_ref_files/Homo_sapiens_assembly38.dict\" -x \"/home/kevin/mutect_ref_files/CosmicCombined.srt.vcf\" -b \"50000000\" -t \"8\" -u \"uuid\" -d"
+	    #MUTECT2_STARTTIME=`date +%s.%N`;
+	    MUTECT2_STARTTIME=$SECONDS;
+	    CMD="run_mutect_docker_calling.sh -y $CALLINGYAML -c $FILE -s $SNPPATH -f $FASTAPATH -i $FAIPATH -k $DICTPATH -x $COSMICPATH -b $BLOCKSIZE -t $THREADCOUNT";
+	    echo $CMD >> $LOG;
+	    eval $CMD &>>$LOG;
+	    CMD_STATUS=$?;
+	    echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+	    #MUTECT2_ENDTIME=`date +%s.%N`;
+	    #MUTECT2_ELAPSEDTIME=`echo "$MUTECT2_ENDTIME - $MUTECT2_STARTTIME" | bc -l`
+	    MUTECT2_ELAPSEDTIME=$(($SECONDS - $MUTECT2_STARTTIME))
+	    echo -e "Command runtime: \t"$MUTECT2_ELAPSEDTIME >> $LOG;
+	    #############################################################################################################
 
-	#############################################################################################################
-	### What to do if the file has already been processed (vcf present), and presumably you are running this just for file transfer rates
-	#############################################################################################################
-	MESSAGE="$VCFOUT already exists, will skip indexing and calling";
+	    #############################################################################################################
+	    ### Upload Results (if option is selected)
+	    #############################################################################################################
+	    if [ $UPLOADRESULTS -eq 1 ]; then
+		
+		MESSAGE="Uploading results ( "$VCFOUT" ) to location specified in ~/.s3.upload.cfg";
+		echo $MESSAGE;
+		echo $MESSAGE >> $LOG;
+		CMD="s3cmd -c ~/.upload.cfg put $VCFOUT s3://$UPLOADBUCKET"
+		echo $CMD >> $LOG;
+		eval $CMD &>>$LOG;
+		CMD_STATUS=$?;
+		echo -e "Command status: \t"$CMD_STATUS >> $LOG;
+
+		########################################
+		# INCLUDE DELETION OF LOCAL RESULTS HERE
+		########################################
+	    
+		# Put file into bucket
+		# s3cmd put FILE [FILE...] s3://BUCKET[/PREFIX]
+		
+		# Conditional transfer — only files that don’t exist at the destination in the same version are transferred
+		# by the s3cmd sync command. By default a md5 checksum and file size is compared.
+		
+		# Synchronize a directory tree to S3 (checks files freshness using size and 
+		# md5 checksum, unless overridden by options, see below)
+		# s3cmd sync LOCAL_DIR s3://BUCKET[/PREFIX] or s3://BUCKET[/PREFIX] LOCAL_DIR
+	    fi
+	    #############################################################################################################
+	    ### Cleanup
+	    #############################################################################################################
+	    if [ ! -e $FILE ]; then
+		MESSAGE="$FILE does not exist; script should have failed before this";
+		echo $MESSAGE;
+		echo $MESSAGE >> $LOG;
+		exit 1;
+	    else
+		MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
+		echo $MESSAGE;
+		echo $MESSAGE >> $LOG;
+		sudo rm $FILE;
+		sudo rm $BAIOUT;
+	    fi
+	    #############################################################################################################
+	
+	    #############################################################################################################
+	    ### Write nice formatted results to the stats file
+	    #############################################################################################################
+	    # echo -e "ark\tsample\ts3_w_parcel.dl_time\ts3_w_parcel.md5\ts3_wo_parcel.dl_time\ts3_wo_parcel.md5\tgrif_w_parcel.dl_time\tgrif_w_parcel.md5\tgrif_wo_parcel.dl_time\tgrif_wo_parcel.md5\tindexing.run_time\tcalling.run_time\n" >> $STATS
+	    #echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_PARCELDLENDTIME\t$GRIF_W_MD5\t$GRIF_WO_PARCEL_DL_ENDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
+	    echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MUTECT1_ELAPSEDTIME\t$MUTECT2_ELAPSEDTIME" >> $STATS;
+	                                                                                   	
+	else
+
+	    #############################################################################################################
+	    ### What to do if the file has already been processed (vcf present), and presumably you are running this just for file transfer rates
+	    #############################################################################################################
+	    MESSAGE="$VCFOUT already exists, will skip indexing and calling";
+    	    echo $MESSAGE;
+    	    echo $MESSAGE >> $LOG;
+	    echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MESSAGE" >> $STATS;
+	    if [ ! -e $FILE ]; then
+		MESSAGE="$FILE does not exist; script should have failed before this";
+		echo $MESSAGE;
+		exit 1;
+	    else
+		MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
+		echo $MESSAGE;
+		echo $MESSAGE >> $LOG;
+		sudo rm $FILE;
+		sudo rm $BAIOUT;
+	    fi
+	    #############################################################################################################
+
+	fi
+
+    else
+	MESSAGE="DOWNLOAD ONLY - DID NOT COMPUTE MUTECT";
     	echo $MESSAGE;
     	echo $MESSAGE >> $LOG;
 	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MESSAGE" >> $STATS;
-	if [ ! -e $FILE ]; then
-	    MESSAGE="$FILE does not exist; script should have failed before this";
-	    echo $MESSAGE;
-	    exit 1;
-	else
-	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
-	    echo $MESSAGE;
-	    echo $MESSAGE >> $LOG;
-	    sudo rm $FILE;
-	    sudo rm $BAIOUT;
-	fi
-	#############################################################################################################
-
     fi
     
     
