@@ -404,6 +404,22 @@ for i in `cat $LIST`; do
     	echo $MESSAGE;
     	echo $MESSAGE >> $LOG;
 	echo -e "$i\t$FILE\t$S3_W_ELAPSEDTIME\t$S3_W_MD5\t$S3_WO_ELAPSEDTIME\t$S3_WO_MD5\t$GRIF_W_ELAPSED_TIME\t$GRIF_W_MD5\t$GRIF_WO_ELAPSEDTIME\t$GRIF_WO_MD5\t$MESSAGE" >> $STATS;
+	#############################################################################################################
+	### Cleanup
+	#############################################################################################################
+	if [ ! -e $FILE ]; then
+	    #MESSAGE="$FILE does not exist; script should have failed before this";
+	    #echo $MESSAGE;
+	    #echo $MESSAGE >> $LOG;
+	    exit 1;
+	else
+	    MESSAGE="Done processing $FILE, will now delete it and any *.bai files";
+	    echo $MESSAGE;
+	    echo $MESSAGE >> $LOG;
+	    sudo rm $FILE;
+	    sudo rm $BAIOUT;
+	fi
+	#############################################################################################################
     fi
     
     
