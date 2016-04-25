@@ -10,7 +10,7 @@ DICTPATH="~/mutect_ref_files/Homo_sapiens_assembly38.dict";
 COSMICPATH="~/mutect_ref_files/CosmicCombined.srt.vcf";
 BLOCKSIZE="50000000"; # should this be defined by resources on the machine instead of arbitrary?
 THREADCOUNT=`grep -c "processor" /proc/cpuinfo`;
-UUID="uuid";
+UUID=`uuid`;
 DEBUG=0;
 
 # Parse input options

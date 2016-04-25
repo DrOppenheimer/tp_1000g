@@ -4,7 +4,7 @@
 YAMLPATH="~/mutect2-pon-cwl/tools/cramtools.cwl.yaml";
 CRAMPATH="~/NA19771.alt_bwamem_GRCh38DH.20150826.MXL.exome.cram";
 FASTAPATH="~/mutect_ref_files/Homo_sapiens_assembly38.fa";
-UUID="uuid";
+UUID=`uuid`;
 DEBUG=0;
 
 # Parse input options
