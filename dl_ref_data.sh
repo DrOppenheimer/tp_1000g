@@ -5,6 +5,9 @@
 # This way for docker
 REF_FILE="~/mutect_ref_files/Homo_sapiens_assembly38.fa"
 
+export http_proxy=http://cloud-proxy:3128
+export https_proxy=http://cloud-proxy:3128
+
 # check for ref data - download if it isn't there
 if [ ! -e $REF_FILE ]; then
     #sudo chown ubuntu:ubuntu /mnt                           # this way for VMs
@@ -19,3 +22,6 @@ if [ ! -e $REF_FILE ]; then
 else
     echo "Ref data is already installed"
 fi
+
+unset http_proxy
+unset https_proxy
