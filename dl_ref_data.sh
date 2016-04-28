@@ -9,7 +9,7 @@ export http_proxy=http://cloud-proxy:3128
 export https_proxy=http://cloud-proxy:3128
 
 # check for ref data - download if it isn't there
-if [ -e $REF_FILE ]; then
+if [ -e "${REF_FILE}" ]; then
     echo "Ref data is already installed"
 else
     #sudo chown ubuntu:ubuntu /mnt                           # this way for VMs
