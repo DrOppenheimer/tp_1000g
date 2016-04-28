@@ -20,7 +20,10 @@ else
     cd ~/mutect_ref_files
     ARK_download.gamma.py -a 'https://signpost.opensciencedatacloud.org/alias/ark:/31807/DC2-39d246e3-c991-4368-a707-b74c19f16ce0' -d -p 'https://griffin-objstore' -b
     tar -xzvf 1000_genome_ref_files.3-7-16.tar.gz
-    echo "Done installing reference data"   
+    echo "Done installing reference data"
+    if [ -e 1000_genome_ref_files.3-7-16.tar.gz ]; then
+	rm 1000_genome_ref_files.3-7-16.tar.gz
+    fi
 fi
 
 unset http_proxy
