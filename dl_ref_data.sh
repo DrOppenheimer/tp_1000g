@@ -3,7 +3,7 @@
 
 #REF_FILE="/mnt/mutect_ref_files/Homo_sapiens_assembly38.fa" # this way for VMs
 # This way for docker
-REF_FILE="~/mutect_ref_files/Homo_sapiens_assembly38.fa"
+export REF_FILE="~/mutect_ref_files/Homo_sapiens_assembly38.fa"
 
 export http_proxy=http://cloud-proxy:3128
 export https_proxy=http://cloud-proxy:3128
@@ -25,3 +25,4 @@ fi
 
 unset http_proxy
 unset https_proxy
+unset REF_FILE
